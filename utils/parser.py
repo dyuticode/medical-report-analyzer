@@ -1,0 +1,76 @@
+import re
+
+def extract_parameters(text):
+    results = []
+    patterns = {
+        "Hemoglobin": r"Hemoglobin[:\s]+([\d.]+)",
+        "RBC Count": r"RBC\s*Count|RBC[:\s]+([\d.]+)",
+        "WBC Count": r"WBC\s*Count|WBC[:\s]+([\d,]+)",
+        "Platelets": r"Platelets[:\s]+([\d,]+)",
+        "Hematocrit": r"Hematocrit|HCT[:\s]+([\d.]+)",
+        "MCV": r"MCV[:\s]+([\d.]+)",
+        "MCH": r"MCH[:\s]+([\d.]+)",
+        "MCHC": r"MCHC[:\s]+([\d.]+)",
+        "RDW": r"RDW[:\s]+([\d.]+)",
+        "Neutrophils": r"Neutrophils[:\s]+([\d.]+)",
+        "Lymphocytes": r"Lymphocytes[:\s]+([\d.]+)",
+        "Monocytes": r"Monocytes[:\s]+([\d.]+)",
+        "Eosinophils": r"Eosinophils[:\s]+([\d.]+)",
+        "Basophils": r"Basophils[:\s]+([\d.]+)",
+        "Fasting Blood Sugar": r"Fasting\s*Blood\s*Sugar|FBS[:\s]+([\d.]+)",
+        "Postprandial Blood Sugar": r"Postprandial|PPBS[:\s]+([\d.]+)",
+        "Random Blood Sugar": r"Random\s*Blood\s*Sugar|RBS[:\s]+([\d.]+)",
+        "HbA1c": r"HbA1c[:\s]+([\d.]+)",
+        "Total Cholesterol": r"Total\s*Cholesterol[:\s]+([\d.]+)",
+        "HDL Cholesterol": r"HDL\s*Cholesterol|HDL[:\s]+([\d.]+)",
+        "LDL Cholesterol": r"LDL\s*Cholesterol|LDL[:\s]+([\d.]+)",
+        "VLDL": r"VLDL[:\s]+([\d.]+)",
+        "Triglycerides": r"Triglycerides[:\s]+([\d,]+)",
+        "Cholesterol/HDL Ratio": r"Cholesterol/HDL\s*Ratio|Cholesterol\s*Ratio[:\s]+([\d.]+)",
+        "Bilirubin Total": r"Bilirubin\s*Total|Total\s*Bilirubin[:\s]+([\d.]+)",
+        "Bilirubin Direct": r"Bilirubin\s*Direct|Direct\s*Bilirubin[:\s]+([\d.]+)",
+        "SGOT": r"SGOT|AST[:\s]+([\d.]+)",
+        "SGPT": r"SGPT|ALT[:\s]+([\d.]+)",
+        "Alkaline Phosphatase": r"Alkaline\s*Phosphatase|ALP[:\s]+([\d.]+)",
+        "Albumin": r"Albumin[:\s]+([\d.]+)",
+        "Total Protein": r"Total\s*Protein[:\s]+([\d.]+)",
+        "Creatinine": r"Creatinine[:\s]+([\d.]+)",
+        "Blood Urea": r"Blood\s*Urea[:\s]+([\d.]+)",
+        "BUN": r"BUN[:\s]+([\d.]+)",
+        "Uric Acid": r"Uric\s*Acid[:\s]+([\d.]+)",
+        "Sodium": r"Sodium[:\s]+([\d.]+)",
+        "Potassium": r"Potassium[:\s]+([\d.]+)",
+        "Chloride": r"Chloride[:\s]+([\d.]+)",
+        "TSH": r"TSH[:\s]+([\d.]+)",
+        "T3": r"T3[:\s]+([\d.]+)",
+        "T4": r"T4[:\s]+([\d.]+)",
+        "Free T3": r"Free\s*T3|FT3[:\s]+([\d.]+)",
+        "Free T4": r"Free\s*T4|FT4[:\s]+([\d.]+)",
+        "Troponin": r"Troponin[:\s]+([A-Za-z0-9.]+)",
+        "CK-MB": r"CK-MB|CKMB[:\s]+([\d.]+)",
+        "Homocysteine": r"Homocysteine[:\s]+([\d.]+)",
+        "CRP": r"CRP[:\s]+([\d.]+)",
+        "Vitamin D": r"Vitamin\s*D3|Vitamin\s*D[:\s]+([\d.]+)",
+        "Vitamin B12": r"Vitamin\s*B12[:\s]+([\d.]+)",
+        "Calcium": r"Calcium[:\s]+([\d.]+)",
+        "Magnesium": r"Magnesium[:\s]+([\d.]+)",
+        "Iron": r"Iron[:\s]+([\d.]+)",
+        "Ferritin": r"Ferritin[:\s]+([\d.]+)",
+        "ESR": r"ESR[:\s]+([\d.]+)",
+        "Procalcitonin": r"Procalcitonin[:\s]+([\d.]+)",
+        "D-Dimer": r"D-Dimer[:\s]+([\d.]+)",
+        "Urine pH": r"Urine\s*pH|pH[:\s]+([\d.]+)",
+        "Specific Gravity": r"Specific\s*Gravity[:\s]+([\d.]+)",
+        "Urine Protein": r"Urine\s*Protein|Protein[:\s]+([A-Za-z+.-]+)",
+        "Urine Glucose": r"Urine\s*Glucose|Glucose[:\s]+([A-Za-z+.-]+)",
+        "Urine Ketones": r"Urine\s*Ketones|Ketones[:\s]+([A-Za-z+.-]+)",
+        "Urine RBC": r"Urine\s*RBC|RBC[:\s]+([\d.]+)",
+        "Urine WBC": r"Urine\s*WBC|WBC[:\s]+([\d.]+)"
+    }
+
+    for test, pattern in patterns.items():
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            captured_val = match.group(1) if match.group(1) else match.group(0).split()[-1]
+            results.append({"Test": test, "Value": captured_val.replace(",", "").strip()})
+    return results
